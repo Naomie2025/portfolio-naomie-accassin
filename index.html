@@ -12,60 +12,81 @@
       --sage:#4a6741; --sage-lt:#6b8f62; --beige:#f2ece2;
       --cream:#faf7f2; --brown:#3a2e22; --muted:#7a6e62;
       --accent:#c2a46e; --white:#ffffff;
+      --nav-h: 60px;
     }
-    html, body { height: 100%; }
+    html { scroll-behavior: smooth; }
     body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--brown); overflow-x:hidden; }
 
-    /* ── NAV ── */
+    /* ══════════════════════════════════════
+       NAV DESKTOP
+    ══════════════════════════════════════ */
     nav {
-      position:fixed; top:0; left:0; right:0; z-index:100;
-      display:flex; justify-content:space-between; align-items:center;
-      padding:1.1rem 3rem;
-      background:rgba(250,247,242,.96); backdrop-filter:blur(12px);
-      border-bottom:1px solid rgba(74,103,65,.12);
+      position: fixed; top:0; left:0; right:0; z-index:200;
+      height: var(--nav-h);
+      display: flex; justify-content:space-between; align-items:center;
+      padding: 0 3rem;
+      background: rgba(250,247,242,.97); backdrop-filter:blur(12px);
+      border-bottom: 1px solid rgba(74,103,65,.12);
     }
     .nav-logo {
       font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600;
-      color:var(--sage); text-decoration:none; letter-spacing:.04em; cursor:pointer;
+      color:var(--sage); cursor:pointer; letter-spacing:.04em; flex-shrink:0;
     }
     .nav-links { display:flex; gap:.2rem; list-style:none; }
     .nav-links a {
       font-size:.78rem; font-weight:500; letter-spacing:.08em; text-transform:uppercase;
-      color:var(--brown); text-decoration:none; padding:.45rem .9rem; border-radius:2px;
-      opacity:.6; transition:all .2s; cursor:pointer; display:block;
+      color:var(--brown); text-decoration:none; padding:.42rem .85rem; border-radius:2px;
+      opacity:.6; transition:all .2s; cursor:pointer; display:block; white-space:nowrap;
     }
     .nav-links a:hover { opacity:1; color:var(--sage); background:rgba(74,103,65,.07); }
     .nav-links a.active { opacity:1; color:var(--sage); background:rgba(74,103,65,.1); }
 
-    /* ── PAGES — le cœur du fix ── */
-    .page {
-      display: none;
-      min-height: 100vh;
+    /* Burger — caché desktop */
+    .burger {
+      display: none; flex-direction:column; justify-content:center; gap:5px;
+      width:36px; height:36px; cursor:pointer; padding:4px; border:none; background:none;
     }
-    .page.active {
-      display: block;
+    .burger span {
+      display:block; height:2px; background:var(--brown); border-radius:2px;
+      transition: transform .3s, opacity .3s;
     }
-    @keyframes fadeIn {
-      from { opacity:0; transform:translateY(10px); }
-      to   { opacity:1; transform:translateY(0); }
-    }
-    .page.active { animation: fadeIn .35s ease; }
+    .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .burger.open span:nth-child(2) { opacity:0; }
+    .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-    /* ── HERO (accueil) ── */
-    #page-accueil {
-      width: 100vw;
-      min-height: 100vh;
+    /* Menu mobile déroulant */
+    .mobile-menu {
+      display:none; position:fixed; top:var(--nav-h); left:0; right:0; z-index:190;
+      background:rgba(250,247,242,.98); backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(74,103,65,.12);
+      flex-direction:column; padding:.5rem 0;
     }
+    .mobile-menu.open { display:flex; }
+    .mobile-menu a {
+      font-size:.85rem; font-weight:500; letter-spacing:.08em; text-transform:uppercase;
+      color:var(--brown); text-decoration:none; padding:.9rem 1.8rem; cursor:pointer;
+      opacity:.7; border-bottom:1px solid rgba(74,103,65,.07); transition:all .15s;
+    }
+    .mobile-menu a:last-child { border-bottom:none; }
+    .mobile-menu a:hover, .mobile-menu a.active { opacity:1; color:var(--sage); background:rgba(74,103,65,.06); }
+
+    /* ══════════════════════════════════════
+       PAGES
+    ══════════════════════════════════════ */
+    .page { display:none; }
+    .page.active { display:block; animation: fadeIn .3s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ══════════════════════════════════════
+       HERO
+    ══════════════════════════════════════ */
     .hero-wrap {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 100vh;
-      padding-top: 62px;
-      width: 100%;
+      display:grid; grid-template-columns:1fr 1fr;
+      min-height:100vh; padding-top:var(--nav-h); width:100%;
     }
     .hero-left {
       display:flex; flex-direction:column; justify-content:center;
-      padding: 4rem 4rem 4rem 6rem;
+      padding:4rem 4rem 4rem 6rem;
     }
     .hero-tag {
       font-size:.72rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase;
@@ -75,141 +96,122 @@
     .hero-tag::before { content:''; width:2rem; height:1px; background:var(--sage); }
     h1 {
       font-family:'Cormorant Garamond',serif;
-      font-size: clamp(3rem, 4.5vw, 5.5rem);
-      font-weight:600; line-height:1.05;
+      font-size:clamp(2.6rem,4.5vw,5.5rem); font-weight:600; line-height:1.06;
       color:var(--brown); margin-bottom:1.4rem;
     }
     h1 em { font-style:italic; color:var(--sage); }
     .hero-sub {
-      font-size:1rem; font-weight:300; line-height:1.85;
-      color:var(--muted); max-width:30rem; margin-bottom:2.6rem;
+      font-size:.97rem; font-weight:300; line-height:1.85;
+      color:var(--muted); max-width:30rem; margin-bottom:2.4rem;
     }
     .hero-sub strong { color:var(--brown); font-weight:500; }
     .hero-ctas { display:flex; gap:1rem; flex-wrap:wrap; }
     .btn-primary {
-      background:var(--sage); color:var(--white);
-      padding:.85rem 2rem; border-radius:2px;
+      background:var(--sage); color:var(--white); padding:.82rem 1.8rem; border-radius:2px;
       font-size:.82rem; font-weight:500; letter-spacing:.06em;
-      border:none; cursor:pointer; transition:background .2s, transform .15s;
+      border:none; cursor:pointer; transition:background .2s,transform .15s;
     }
     .btn-primary:hover { background:var(--sage-lt); transform:translateY(-2px); }
     .btn-outline {
       border:1.5px solid var(--brown); color:var(--brown); background:transparent;
-      padding:.85rem 2rem; border-radius:2px;
+      padding:.82rem 1.8rem; border-radius:2px;
       font-size:.82rem; font-weight:500; letter-spacing:.06em;
       cursor:pointer; transition:all .2s;
     }
     .btn-outline:hover { border-color:var(--sage); color:var(--sage); transform:translateY(-2px); }
-
-    .hero-right {
-      background:var(--sage); position:relative; overflow:hidden;
-      min-height: calc(100vh - 62px);
-    }
+    .hero-right { background:var(--sage); position:relative; overflow:hidden; }
     .hero-right::before {
       content:''; position:absolute; inset:0;
-      background:
-        radial-gradient(circle at 70% 30%, rgba(194,164,110,.3) 0%, transparent 55%),
-        radial-gradient(circle at 20% 80%, rgba(250,247,242,.06) 0%, transparent 50%);
+      background:radial-gradient(circle at 70% 30%,rgba(194,164,110,.3) 0%,transparent 55%),
+                 radial-gradient(circle at 20% 80%,rgba(250,247,242,.06) 0%,transparent 50%);
     }
     .hero-pattern {
       position:absolute; inset:0;
-      background-image: repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,255,255,.04) 40px,rgba(255,255,255,.04) 41px);
+      background-image:repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,255,255,.04) 40px,rgba(255,255,255,.04) 41px);
     }
     .hero-float {
-      position:absolute; inset:0;
-      display:flex; flex-direction:column; justify-content:center;
-      align-items:center; gap:1.2rem; padding:3rem;
+      position:absolute; inset:0; display:flex; flex-direction:column;
+      justify-content:center; align-items:center; gap:1.1rem; padding:2.5rem;
     }
     .stat-card {
       background:rgba(250,247,242,.1); border:1px solid rgba(250,247,242,.2);
-      backdrop-filter:blur(8px); border-radius:4px; padding:1.3rem 1.8rem;
-      width:100%; max-width:290px;
+      backdrop-filter:blur(8px); border-radius:4px; padding:1.2rem 1.7rem;
+      width:100%; max-width:280px;
     }
     .stat-card:nth-child(2) { margin-left:2.5rem; }
     .stat-card:nth-child(4) { margin-left:2rem; }
-    .stat-num {
-      font-family:'Cormorant Garamond',serif; font-size:2.2rem; font-weight:600;
-      color:var(--accent); line-height:1;
-    }
-    .stat-label { font-size:.75rem; color:rgba(250,247,242,.82); margin-top:.28rem; }
+    .stat-num { font-family:'Cormorant Garamond',serif; font-size:2.1rem; font-weight:600; color:var(--accent); line-height:1; }
+    .stat-label { font-size:.73rem; color:rgba(250,247,242,.82); margin-top:.25rem; }
 
-    /* ── PAGES INTERNES ── */
-    .page-inner { padding:7rem 6rem 5rem; max-width:1140px; margin:0 auto; }
+    /* ══════════════════════════════════════
+       PAGES INTERNES
+    ══════════════════════════════════════ */
+    .page-inner { padding:calc(var(--nav-h) + 3rem) 6rem 5rem; max-width:1140px; margin:0 auto; }
     .page-inner.wide { max-width:1240px; }
-
     .section-tag {
       font-size:.7rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase;
       color:var(--sage); display:flex; align-items:center; gap:.6rem; margin-bottom:1rem;
     }
     .section-tag::before { content:''; width:1.5rem; height:1px; background:var(--sage); }
-
     h2 {
       font-family:'Cormorant Garamond',serif;
-      font-size:clamp(2rem,3vw,3.2rem); font-weight:600; line-height:1.1;
+      font-size:clamp(1.9rem,3vw,3.1rem); font-weight:600; line-height:1.1;
       color:var(--brown); margin-bottom:2.5rem;
     }
     h2 em { font-style:italic; color:var(--sage); }
 
-    /* ── À PROPOS ── */
+    /* À PROPOS */
     .apropos-grid { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start; }
-    .apropos-text p { font-size:.96rem; line-height:1.85; color:var(--muted); margin-bottom:1.1rem; }
+    .apropos-text p { font-size:.95rem; line-height:1.85; color:var(--muted); margin-bottom:1.1rem; }
     .apropos-text p strong { color:var(--brown); font-weight:500; }
     .highlight-box {
       background:var(--beige); border-left:3px solid var(--sage);
       padding:1.1rem 1.4rem; border-radius:0 4px 4px 0;
-      font-size:.88rem; line-height:1.7; color:var(--brown); margin-top:1.5rem;
+      font-size:.87rem; line-height:1.7; color:var(--brown); margin-top:1.4rem;
     }
-    .timeline { padding-left:0; }
     .tl-group { margin-bottom:2rem; }
     .tl-group-title {
-      font-size:.68rem; font-weight:600; letter-spacing:.15em; text-transform:uppercase;
+      font-size:.67rem; font-weight:600; letter-spacing:.15em; text-transform:uppercase;
       color:var(--white); background:var(--sage); display:inline-block;
-      padding:.25rem .75rem; border-radius:2px; margin-bottom:1rem;
+      padding:.22rem .7rem; border-radius:2px; margin-bottom:.9rem;
     }
-    .tl-items { border-left:2px solid var(--beige); padding-left:1.6rem; }
-    .tl-item { position:relative; padding-bottom:1.5rem; }
+    .tl-items { border-left:2px solid var(--beige); padding-left:1.5rem; }
+    .tl-item { position:relative; padding-bottom:1.4rem; }
     .tl-item:last-child { padding-bottom:0; }
     .tl-item::before {
-      content:''; position:absolute; left:-2.1rem; top:.38rem;
+      content:''; position:absolute; left:-2rem; top:.36rem;
       width:9px; height:9px; border-radius:50%;
       background:var(--sage); border:2px solid var(--cream);
     }
-    .tl-date { font-size:.68rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:.18rem; }
-    .tl-title { font-weight:500; font-size:.9rem; color:var(--brown); }
-    .tl-desc { font-size:.8rem; color:var(--muted); margin-top:.18rem; line-height:1.55; }
-    .tl-tags { display:flex; flex-wrap:wrap; gap:.3rem; margin-top:.45rem; }
-    .tl-tag { font-size:.66rem; background:rgba(74,103,65,.1); color:var(--sage); padding:.18rem .55rem; border-radius:50px; }
+    .tl-date { font-size:.67rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:.16rem; }
+    .tl-title { font-weight:500; font-size:.88rem; color:var(--brown); }
+    .tl-desc { font-size:.79rem; color:var(--muted); margin-top:.16rem; line-height:1.55; }
+    .tl-tags { display:flex; flex-wrap:wrap; gap:.28rem; margin-top:.42rem; }
+    .tl-tag { font-size:.65rem; background:rgba(74,103,65,.1); color:var(--sage); padding:.16rem .5rem; border-radius:50px; }
 
-    /* ── COMPÉTENCES ── */
-    .skills-lead { font-size:.96rem; line-height:1.8; color:var(--muted); max-width:36rem; margin-bottom:3rem; }
-    .skills-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.3rem; }
+    /* COMPÉTENCES */
+    .skills-lead { font-size:.95rem; line-height:1.8; color:var(--muted); max-width:36rem; margin-bottom:2.8rem; }
+    .skills-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; }
     .skill-block {
-      background:var(--white); border-radius:4px; padding:1.7rem 1.5rem;
-      border:1px solid rgba(74,103,65,.1);
-      transition:transform .25s, box-shadow .25s;
+      background:var(--white); border-radius:4px; padding:1.6rem 1.4rem;
+      border:1px solid rgba(74,103,65,.1); transition:transform .25s,box-shadow .25s;
     }
     .skill-block:hover { transform:translateY(-5px); box-shadow:0 12px 30px rgba(58,46,34,.08); }
-    .skill-icon { font-size:1.4rem; margin-bottom:.75rem; }
-    .skill-title { font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:600; color:var(--brown); margin-bottom:.65rem; }
-    .tags { display:flex; flex-wrap:wrap; gap:.32rem; }
-    .tag { font-size:.68rem; font-weight:500; background:rgba(74,103,65,.1); color:var(--sage); padding:.2rem .6rem; border-radius:50px; }
-    .soft-section { margin-top:3.5rem; }
-    .soft-section h3 { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:600; color:var(--brown); margin-bottom:1.2rem; }
-    .soft-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
-    .soft-card { background:var(--beige); border-radius:4px; padding:1.3rem 1.1rem; text-align:center; }
-    .s-icon { font-size:1.5rem; margin-bottom:.4rem; }
-    .s-label { font-size:.82rem; font-weight:500; color:var(--brown); }
+    .skill-icon { font-size:1.35rem; margin-bottom:.7rem; }
+    .skill-title { font-family:'Cormorant Garamond',serif; font-size:1.18rem; font-weight:600; color:var(--brown); margin-bottom:.62rem; }
+    .tags { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .tag { font-size:.67rem; font-weight:500; background:rgba(74,103,65,.1); color:var(--sage); padding:.18rem .58rem; border-radius:50px; }
+    .soft-section { margin-top:3rem; }
+    .soft-section h3 { font-family:'Cormorant Garamond',serif; font-size:1.45rem; font-weight:600; color:var(--brown); margin-bottom:1.1rem; }
+    .soft-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:.9rem; }
+    .soft-card { background:var(--beige); border-radius:4px; padding:1.2rem 1rem; text-align:center; }
+    .s-icon { font-size:1.4rem; margin-bottom:.38rem; }
+    .s-label { font-size:.8rem; font-weight:500; color:var(--brown); }
 
-    /* ── PORTFOLIO ── */
-    .portfolio-intro { font-size:.96rem; line-height:1.8; color:var(--muted); max-width:38rem; margin-bottom:3rem; }
-    .proj-grid {
-      display:grid; grid-template-columns:repeat(12,1fr);
-      grid-auto-rows:minmax(180px,auto); gap:1.2rem;
-    }
-    .proj-card {
-      border-radius:4px; overflow:hidden; position:relative; cursor:pointer;
-      transition:transform .3s, box-shadow .3s;
-    }
+    /* PORTFOLIO */
+    .portfolio-intro { font-size:.95rem; line-height:1.8; color:var(--muted); max-width:38rem; margin-bottom:2.8rem; }
+    .proj-grid { display:grid; grid-template-columns:repeat(12,1fr); grid-auto-rows:minmax(170px,auto); gap:1.1rem; }
+    .proj-card { border-radius:4px; overflow:hidden; position:relative; cursor:pointer; transition:transform .3s,box-shadow .3s; }
     .proj-card:hover { transform:scale(1.025); box-shadow:0 16px 40px rgba(58,46,34,.14); }
     .proj-card:hover .proj-overlay { opacity:1; }
     .proj-card:nth-child(1) { grid-column:span 7; grid-row:span 2; }
@@ -218,144 +220,161 @@
     .proj-card:nth-child(4) { grid-column:span 4; }
     .proj-card:nth-child(5) { grid-column:span 4; }
     .proj-card:nth-child(6) { grid-column:span 4; }
-    .proj-bg {
-      width:100%; height:100%; min-height:190px;
-      display:flex; align-items:flex-end; padding:1.5rem; position:relative;
-    }
-    .proj-card:nth-child(1) .proj-bg { min-height:390px; }
+    .proj-bg { width:100%; height:100%; min-height:180px; display:flex; align-items:flex-end; padding:1.4rem; position:relative; }
+    .proj-card:nth-child(1) .proj-bg { min-height:370px; }
     .bg-1{background:linear-gradient(135deg,#4a6741 0%,#2d4229 100%);}
     .bg-2{background:linear-gradient(135deg,#c2a46e 0%,#8a6b3a 100%);}
     .bg-3{background:linear-gradient(135deg,#3a2e22 0%,#5a4a3a 100%);}
     .bg-4{background:linear-gradient(135deg,#6b8f62 0%,#4a6741 100%);}
     .bg-5{background:linear-gradient(135deg,#f2ece2 0%,#d4c8b4 100%);}
     .bg-6{background:linear-gradient(135deg,#8a6b3a 0%,#c2a46e 100%);}
-    .proj-overlay {
-      position:absolute; inset:0; background:rgba(58,46,34,.72);
-      opacity:0; transition:opacity .3s;
-      display:flex; align-items:center; justify-content:center;
-    }
-    .proj-overlay span {
-      font-size:.74rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase;
-      color:var(--white); border:1px solid rgba(255,255,255,.5);
-      padding:.5rem 1.2rem; border-radius:2px;
-    }
+    .proj-overlay { position:absolute; inset:0; background:rgba(58,46,34,.72); opacity:0; transition:opacity .3s; display:flex; align-items:center; justify-content:center; }
+    .proj-overlay span { font-size:.72rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--white); border:1px solid rgba(255,255,255,.5); padding:.48rem 1.1rem; border-radius:2px; }
     .proj-info { position:relative; z-index:1; }
-    .proj-cat { font-size:.64rem; font-weight:500; letter-spacing:.12em; text-transform:uppercase; opacity:.75; margin-bottom:.28rem; }
-    .proj-title { font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:600; line-height:1.2; }
-    .proj-card:nth-child(1) .proj-title { font-size:1.85rem; }
-    .proj-emoji { position:absolute; top:1.1rem; right:1.1rem; font-size:1.7rem; opacity:.2; }
-    .text-light { color:var(--white); }
-    .text-dark  { color:var(--brown); }
-    .placeholder-note {
-      margin-top:2.5rem; background:var(--beige); border:1.5px dashed rgba(74,103,65,.3);
-      border-radius:4px; padding:1.4rem 1.8rem;
-      font-size:.83rem; color:var(--muted); line-height:1.7;
-    }
+    .proj-cat { font-size:.63rem; font-weight:500; letter-spacing:.12em; text-transform:uppercase; opacity:.75; margin-bottom:.26rem; }
+    .proj-title { font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:600; line-height:1.2; }
+    .proj-card:nth-child(1) .proj-title { font-size:1.8rem; }
+    .proj-emoji { position:absolute; top:1rem; right:1rem; font-size:1.6rem; opacity:.2; }
+    .text-light { color:var(--white); } .text-dark { color:var(--brown); }
+    .placeholder-note { margin-top:2.2rem; background:var(--beige); border:1.5px dashed rgba(74,103,65,.3); border-radius:4px; padding:1.3rem 1.6rem; font-size:.82rem; color:var(--muted); line-height:1.7; }
 
-    /* ── CV ── */
-    .cv-header {
-      display:grid; grid-template-columns:1fr auto; gap:2rem; align-items:start;
-      padding-bottom:2.5rem; border-bottom:1px solid var(--beige); margin-bottom:3rem;
-    }
-    .cv-name { font-family:'Cormorant Garamond',serif; font-size:3rem; font-weight:600; color:var(--brown); line-height:1; }
-    .cv-title-line { font-size:.97rem; color:var(--sage); font-weight:500; margin-top:.4rem; letter-spacing:.03em; }
-    .cv-dispo {
-      display:inline-flex; align-items:center; gap:.5rem;
-      background:rgba(74,103,65,.1); color:var(--sage);
-      padding:.38rem .95rem; border-radius:50px; font-size:.74rem; font-weight:500; margin-top:.6rem;
-    }
+    /* CV */
+    .cv-header { display:grid; grid-template-columns:1fr auto; gap:2rem; align-items:start; padding-bottom:2.3rem; border-bottom:1px solid var(--beige); margin-bottom:2.8rem; }
+    .cv-name { font-family:'Cormorant Garamond',serif; font-size:2.8rem; font-weight:600; color:var(--brown); line-height:1; }
+    .cv-title-line { font-size:.95rem; color:var(--sage); font-weight:500; margin-top:.38rem; }
+    .cv-dispo { display:inline-flex; align-items:center; gap:.45rem; background:rgba(74,103,65,.1); color:var(--sage); padding:.35rem .9rem; border-radius:50px; font-size:.72rem; font-weight:500; margin-top:.55rem; }
     .cv-dispo::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--sage); }
-    .cv-download {
-      background:var(--sage); color:var(--white); padding:.72rem 1.5rem;
-      border-radius:2px; font-size:.78rem; font-weight:500; letter-spacing:.06em;
-      text-decoration:none; display:flex; align-items:center; gap:.5rem;
-      white-space:nowrap; align-self:start; transition:background .2s;
-    }
+    .cv-download { background:var(--sage); color:var(--white); padding:.7rem 1.4rem; border-radius:2px; font-size:.77rem; font-weight:500; letter-spacing:.06em; text-decoration:none; display:flex; align-items:center; gap:.45rem; white-space:nowrap; align-self:start; transition:background .2s; }
     .cv-download:hover { background:var(--sage-lt); }
-    .cv-body { display:grid; grid-template-columns:1fr 1.7fr; gap:4rem; }
-    .cv-col { display:flex; flex-direction:column; gap:2.5rem; }
-    .cv-sec-title {
-      font-size:.68rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
-      color:var(--sage); border-bottom:1px solid var(--beige); padding-bottom:.45rem; margin-bottom:1.1rem;
-    }
-    .cv-contact-item { display:flex; align-items:center; gap:.55rem; font-size:.82rem; color:var(--muted); margin-bottom:.45rem; }
-    .cv-skill-row { margin-bottom:.85rem; }
-    .cv-skill-label { font-size:.78rem; font-weight:500; color:var(--brown); margin-bottom:.28rem; display:flex; justify-content:space-between; }
-    .cv-skill-level { font-size:.72rem; color:var(--muted); font-weight:400; }
+    .cv-body { display:grid; grid-template-columns:1fr 1.7fr; gap:3.5rem; }
+    .cv-col { display:flex; flex-direction:column; gap:2.2rem; }
+    .cv-sec-title { font-size:.67rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--sage); border-bottom:1px solid var(--beige); padding-bottom:.4rem; margin-bottom:1rem; }
+    .cv-contact-item { display:flex; align-items:center; gap:.5rem; font-size:.81rem; color:var(--muted); margin-bottom:.42rem; }
+    .cv-skill-row { margin-bottom:.8rem; }
+    .cv-skill-label { font-size:.77rem; font-weight:500; color:var(--brown); margin-bottom:.26rem; display:flex; justify-content:space-between; }
+    .cv-skill-level { font-size:.71rem; color:var(--muted); font-weight:400; }
     .cv-bar { height:3px; background:var(--beige); border-radius:2px; overflow:hidden; }
     .cv-bar-fill { height:100%; background:var(--sage); border-radius:2px; }
-    .cv-lang-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:.6rem; }
-    .cv-lang-name { font-size:.82rem; font-weight:500; color:var(--brown); }
-    .cv-dots { display:flex; gap:.28rem; }
+    .cv-lang-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:.55rem; }
+    .cv-lang-name { font-size:.81rem; font-weight:500; color:var(--brown); }
+    .cv-dots { display:flex; gap:.26rem; }
     .cv-dot { width:8px; height:8px; border-radius:50%; background:var(--beige); }
     .cv-dot.on { background:var(--sage); }
-    .cv-exp-item { margin-bottom:1.7rem; }
-    .cv-exp-date { font-size:.68rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:.2rem; }
-    .cv-exp-title { font-weight:500; font-size:.9rem; color:var(--brown); }
-    .cv-exp-place { font-size:.78rem; color:var(--sage); margin-bottom:.3rem; }
-    .cv-exp-desc { font-size:.79rem; color:var(--muted); line-height:1.65; padding-left:1rem; }
-    .cv-exp-desc li { margin-bottom:.2rem; }
-    .cv-form-item { margin-bottom:1.1rem; }
-    .cv-form-date { font-size:.68rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:.15rem; }
-    .cv-form-title { font-weight:500; font-size:.88rem; color:var(--brown); }
-    .cv-form-place { font-size:.77rem; color:var(--muted); }
+    .cv-exp-item { margin-bottom:1.6rem; }
+    .cv-exp-date { font-size:.67rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:.18rem; }
+    .cv-exp-title { font-weight:500; font-size:.88rem; color:var(--brown); }
+    .cv-exp-place { font-size:.77rem; color:var(--sage); margin-bottom:.28rem; }
+    .cv-exp-desc { font-size:.78rem; color:var(--muted); line-height:1.65; padding-left:1rem; }
+    .cv-exp-desc li { margin-bottom:.18rem; }
+    .cv-form-item { margin-bottom:1rem; }
+    .cv-form-date { font-size:.67rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:.13rem; }
+    .cv-form-title { font-weight:500; font-size:.87rem; color:var(--brown); }
+    .cv-form-place { font-size:.76rem; color:var(--muted); }
 
-    /* ── CONTACT ── */
+    /* CONTACT */
     .contact-grid { display:grid; grid-template-columns:1.3fr 1fr; gap:5rem; align-items:start; }
-    .contact-intro { font-size:.96rem; line-height:1.85; color:var(--muted); margin-bottom:2rem; }
-    .contact-pitch {
-      background:var(--sage); color:var(--white); padding:2rem 2.2rem;
-      border-radius:4px; font-size:.9rem; line-height:1.8; margin-bottom:2rem;
-      font-style:italic;
-    }
+    .contact-intro { font-size:.95rem; line-height:1.85; color:var(--muted); margin-bottom:1.8rem; }
+    .contact-pitch { background:var(--sage); color:var(--white); padding:1.8rem 2rem; border-radius:4px; font-size:.88rem; line-height:1.8; margin-bottom:1.8rem; font-style:italic; }
     .contact-pitch strong { color:var(--accent); font-style:normal; }
-    .cibles-section h3 { font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:600; color:var(--brown); margin-bottom:1rem; }
-    .cibles-grid { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; }
-    .cible-item {
-      background:var(--beige); border-radius:4px; padding:1rem 1.2rem;
-      border-left:3px solid var(--sage);
-    }
-    .cible-title { font-size:.85rem; font-weight:500; color:var(--brown); }
-    .cible-desc { font-size:.75rem; color:var(--muted); margin-top:.18rem; line-height:1.5; }
-    .contact-items { display:flex; flex-direction:column; gap:.9rem; }
-    .contact-item {
-      display:flex; align-items:center; gap:1rem;
-      background:var(--white); border:1px solid rgba(74,103,65,.15);
-      border-radius:4px; padding:1.1rem 1.4rem;
-      text-decoration:none; transition:all .2s; cursor:pointer;
-    }
+    .cibles-section h3 { font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:600; color:var(--brown); margin-bottom:.9rem; }
+    .cibles-grid { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; }
+    .cible-item { background:var(--beige); border-radius:4px; padding:.95rem 1.1rem; border-left:3px solid var(--sage); }
+    .cible-title { font-size:.83rem; font-weight:500; color:var(--brown); }
+    .cible-desc { font-size:.74rem; color:var(--muted); margin-top:.16rem; line-height:1.5; }
+    .contact-items { display:flex; flex-direction:column; gap:.85rem; }
+    .contact-item { display:flex; align-items:center; gap:.95rem; background:var(--white); border:1px solid rgba(74,103,65,.15); border-radius:4px; padding:1rem 1.3rem; text-decoration:none; transition:all .2s; cursor:pointer; }
     .contact-item:hover { border-color:var(--sage); transform:translateX(4px); }
-    .ci-icon { font-size:1.2rem; }
-    .ci-label { font-size:.66rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:.1rem; }
-    .ci-value { font-size:.86rem; color:var(--brown); }
-    .contact-note {
-      margin-top:1.4rem; font-size:.79rem; color:var(--muted); line-height:1.7;
-      padding:.9rem 1.1rem; background:var(--beige); border-radius:4px;
+    .ci-icon { font-size:1.15rem; }
+    .ci-label { font-size:.65rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:.08rem; }
+    .ci-value { font-size:.84rem; color:var(--brown); }
+    .contact-note { margin-top:1.3rem; font-size:.78rem; color:var(--muted); line-height:1.7; padding:.85rem 1rem; background:var(--beige); border-radius:4px; }
+
+    /* ══════════════════════════════════════
+       RESPONSIVE MOBILE
+    ══════════════════════════════════════ */
+    @media (max-width: 768px) {
+      :root { --nav-h: 56px; }
+
+      /* NAV */
+      nav { padding: 0 1.2rem; }
+      .nav-links { display: none; } /* caché, remplacé par burger */
+      .burger { display: flex; }
+
+      /* HERO */
+      .hero-wrap {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        min-height: auto;
+      }
+      .hero-left {
+        padding: 2.5rem 1.4rem 2rem;
+        order: 1;
+      }
+      .hero-right {
+        order: 2;
+        min-height: 280px;
+        position: relative;
+      }
+      .hero-float {
+        position: relative;
+        padding: 2rem 1.4rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: .8rem;
+      }
+      .stat-card { max-width:100%; margin-left:0 !important; }
+      .stat-num { font-size: 1.7rem; }
+      .stat-label { font-size: .68rem; }
+      .hero-ctas { flex-direction: column; }
+      .btn-primary, .btn-outline { text-align:center; width:100%; }
+
+      /* PAGES INTERNES */
+      .page-inner {
+        padding: calc(var(--nav-h) + 2rem) 1.4rem 3rem;
+      }
+
+      /* À PROPOS */
+      .apropos-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+
+      /* COMPÉTENCES */
+      .skills-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+      .soft-grid { grid-template-columns: 1fr 1fr; gap: .8rem; }
+
+      /* PORTFOLIO */
+      .proj-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-auto-rows: minmax(140px, auto);
+        gap: .8rem;
+      }
+      .proj-card { grid-column: span 1 !important; grid-row: span 1 !important; }
+      .proj-card:nth-child(1) .proj-bg,
+      .proj-bg { min-height: 140px; }
+
+      /* CV */
+      .cv-header { grid-template-columns: 1fr; gap: 1.2rem; }
+      .cv-download { align-self: flex-start; }
+      .cv-body { grid-template-columns: 1fr; gap: 2rem; }
+      .cv-name { font-size: 2rem; }
+
+      /* CONTACT */
+      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .cibles-grid { grid-template-columns: 1fr; gap: .7rem; }
     }
 
-    /* ── RESPONSIVE ── */
-    @media(max-width:960px){
-      nav { padding:1rem 1.2rem; }
-      .nav-links a { padding:.38rem .55rem; font-size:.7rem; }
-      .hero-wrap { grid-template-columns:1fr; }
-      .hero-left { padding:3rem 1.8rem 2rem; }
-      .hero-right { min-height:260px; }
-      .page-inner { padding:5rem 1.8rem 3rem; }
-      .apropos-grid,.cv-body,.contact-grid { grid-template-columns:1fr; gap:2.5rem; }
-      .skills-grid { grid-template-columns:1fr 1fr; }
-      .soft-grid { grid-template-columns:1fr 1fr; }
-      .proj-grid { grid-template-columns:1fr 1fr; }
-      .proj-card { grid-column:span 1 !important; grid-row:span 1 !important; }
-      .cv-header { grid-template-columns:1fr; }
-      .cibles-grid { grid-template-columns:1fr; }
+    @media (max-width: 480px) {
+      .skills-grid { grid-template-columns: 1fr; }
+      .proj-grid { grid-template-columns: 1fr; }
+      .proj-card:nth-child(1) .proj-bg,
+      .proj-bg { min-height: 160px; }
     }
   </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
   <span class="nav-logo" onclick="showPage('accueil')">N. —</span>
-  <ul class="nav-links">
+  <ul class="nav-links" id="desktopNav">
     <li><a onclick="showPage('accueil')"     id="nav-accueil"     class="active">Accueil</a></li>
     <li><a onclick="showPage('apropos')"     id="nav-apropos">À propos</a></li>
     <li><a onclick="showPage('competences')" id="nav-competences">Compétences</a></li>
@@ -363,9 +382,22 @@
     <li><a onclick="showPage('cv')"          id="nav-cv">CV</a></li>
     <li><a onclick="showPage('contact')"     id="nav-contact">Contact</a></li>
   </ul>
+  <button class="burger" id="burger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
-<!-- ════════════════ ACCUEIL ════════════════ -->
+<!-- MENU MOBILE -->
+<div class="mobile-menu" id="mobileMenu">
+  <a onclick="showPage('accueil');closeMenu()"     id="mnav-accueil"     class="active">Accueil</a>
+  <a onclick="showPage('apropos');closeMenu()"     id="mnav-apropos">À propos</a>
+  <a onclick="showPage('competences');closeMenu()" id="mnav-competences">Compétences</a>
+  <a onclick="showPage('portfolio');closeMenu()"   id="mnav-portfolio">Portfolio</a>
+  <a onclick="showPage('cv');closeMenu()"          id="mnav-cv">CV</a>
+  <a onclick="showPage('contact');closeMenu()"     id="mnav-contact">Contact</a>
+</div>
+
+<!-- ════ ACCUEIL ════ -->
 <div id="page-accueil" class="page active">
   <div class="hero-wrap">
     <div class="hero-left">
@@ -403,7 +435,7 @@
   </div>
 </div>
 
-<!-- ════════════════ À PROPOS ════════════════ -->
+<!-- ════ À PROPOS ════ -->
 <div id="page-apropos" class="page">
   <div class="page-inner">
     <div class="section-tag">À propos</div>
@@ -418,45 +450,30 @@
           💡 Mon parcours atypique me donne une chose rare : comprendre les contraintes d'une petite structure de l'intérieur — parce que je les ai vécues moi-même.
         </div>
       </div>
-
       <div>
-        <!-- EXPÉRIENCES -->
         <div class="tl-group">
           <div class="tl-group-title">Expériences</div>
           <div class="tl-items">
             <div class="tl-item">
               <div class="tl-date">2025 – 2026</div>
               <div class="tl-title">Stagiaire Communication & Événementiel</div>
-              <div class="tl-desc">Cnam Incubateur — Paris<br>Visuels, réseaux sociaux, coordination événements, prospection startups, gestion des réservations et planning éditorial</div>
-              <div class="tl-tags">
-                <span class="tl-tag">Com digitale</span>
-                <span class="tl-tag">Événementiel</span>
-                <span class="tl-tag">Prospection</span>
-              </div>
+              <div class="tl-desc">Cnam Incubateur — Paris<br>Visuels, réseaux sociaux, coordination événements, prospection startups, planning éditorial</div>
+              <div class="tl-tags"><span class="tl-tag">Com digitale</span><span class="tl-tag">Événementiel</span><span class="tl-tag">Prospection</span></div>
             </div>
             <div class="tl-item">
               <div class="tl-date">Expérience</div>
-              <div class="tl-title">Gérante mandataire remplaçante</div>
-              <div class="tl-desc">Nicolas — Boutique<br>Tenue en totale autonomie : commandes, encaissements, relation clients, remises en banque</div>
-              <div class="tl-tags">
-                <span class="tl-tag">Gestion</span>
-                <span class="tl-tag">Autonomie</span>
-                <span class="tl-tag">Commercial</span>
-              </div>
+              <div class="tl-title">Gérante mandataire remplaçante — Nicolas</div>
+              <div class="tl-desc">Tenue de boutique en totale autonomie : commandes, encaissements, relation clients, remises en banque</div>
+              <div class="tl-tags"><span class="tl-tag">Gestion</span><span class="tl-tag">Autonomie</span><span class="tl-tag">Commercial</span></div>
             </div>
             <div class="tl-item">
               <div class="tl-date">Service civique</div>
               <div class="tl-title">Co-référente — Conseil Municipal des Enfants</div>
-              <div class="tl-desc">Évry-Courcouronnes — Animation de groupes, prises de parole, présentations publiques, coordination de projets collectifs</div>
-              <div class="tl-tags">
-                <span class="tl-tag">Animation</span>
-                <span class="tl-tag">Coordination</span>
-              </div>
+              <div class="tl-desc">Évry-Courcouronnes — Animation de groupes, prises de parole, présentations publiques</div>
+              <div class="tl-tags"><span class="tl-tag">Animation</span><span class="tl-tag">Coordination</span></div>
             </div>
           </div>
         </div>
-
-        <!-- FORMATIONS -->
         <div class="tl-group">
           <div class="tl-group-title">Formations</div>
           <div class="tl-items">
@@ -468,10 +485,8 @@
             <div class="tl-item">
               <div class="tl-date">Formation initiale</div>
               <div class="tl-title">Bac Pro Cuisine — Section européenne</div>
-              <div class="tl-desc">Rigueur, créativité sous contrainte, niveau d'anglais renforcé (section européenne)</div>
-              <div class="tl-tags">
-                <span class="tl-tag">Erasmus — Malte & Dublin</span>
-              </div>
+              <div class="tl-desc">Rigueur, créativité sous contrainte, niveau anglais renforcé</div>
+              <div class="tl-tags"><span class="tl-tag">Erasmus — Malte & Dublin</span></div>
             </div>
           </div>
         </div>
@@ -480,65 +495,19 @@
   </div>
 </div>
 
-<!-- ════════════════ COMPÉTENCES ════════════════ -->
+<!-- ════ COMPÉTENCES ════ -->
 <div id="page-competences" class="page">
   <div class="page-inner">
     <div class="section-tag">Compétences</div>
     <h2>Ce que j'apporte<br><em>concrètement</em></h2>
     <p class="skills-lead">Des compétences construites sur le terrain, pas seulement en cours. Chaque case est validée par une expérience réelle.</p>
     <div class="skills-grid">
-      <div class="skill-block">
-        <div class="skill-icon">📱</div>
-        <div class="skill-title">Communication digitale</div>
-        <div class="tags">
-          <span class="tag">Instagram</span><span class="tag">TikTok</span>
-          <span class="tag">Stratégie éditoriale</span><span class="tag">Planning contenu</span>
-          <span class="tag">Community management</span><span class="tag">Reels / Vidéo</span>
-        </div>
-      </div>
-      <div class="skill-block">
-        <div class="skill-icon">🎨</div>
-        <div class="skill-title">Création visuelle</div>
-        <div class="tags">
-          <span class="tag">Canva</span><span class="tag">Logos</span>
-          <span class="tag">Cartes de visite</span><span class="tag">Affiches</span>
-          <span class="tag">Identité visuelle</span><span class="tag">Vidéo promotionnelle</span>
-        </div>
-      </div>
-      <div class="skill-block">
-        <div class="skill-icon">🌐</div>
-        <div class="skill-title">Web & outils digitaux</div>
-        <div class="tags">
-          <span class="tag">Systeme.io</span><span class="tag">WordPress</span>
-          <span class="tag">Suite Office avancé</span><span class="tag">HTML/CSS notions</span>
-        </div>
-      </div>
-      <div class="skill-block">
-        <div class="skill-icon">📋</div>
-        <div class="skill-title">Gestion de projets</div>
-        <div class="tags">
-          <span class="tag">Planning</span><span class="tag">Coordination</span>
-          <span class="tag">Suivi client</span><span class="tag">Prospection</span>
-          <span class="tag">Événementiel</span><span class="tag">Brief & reporting</span>
-        </div>
-      </div>
-      <div class="skill-block">
-        <div class="skill-icon">🤝</div>
-        <div class="skill-title">Relation & animation</div>
-        <div class="tags">
-          <span class="tag">Prise de parole</span><span class="tag">Animation de groupes</span>
-          <span class="tag">Présentation</span><span class="tag">Accueil client</span>
-          <span class="tag">Négociation</span>
-        </div>
-      </div>
-      <div class="skill-block">
-        <div class="skill-icon">⚙️</div>
-        <div class="skill-title">Gestion opérationnelle</div>
-        <div class="tags">
-          <span class="tag">Autonomie totale</span><span class="tag">Encaissements</span>
-          <span class="tag">Gestion de commandes</span><span class="tag">Organisation</span>
-        </div>
-      </div>
+      <div class="skill-block"><div class="skill-icon">📱</div><div class="skill-title">Communication digitale</div><div class="tags"><span class="tag">Instagram</span><span class="tag">TikTok</span><span class="tag">Stratégie éditoriale</span><span class="tag">Planning contenu</span><span class="tag">Community management</span><span class="tag">Reels / Vidéo</span></div></div>
+      <div class="skill-block"><div class="skill-icon">🎨</div><div class="skill-title">Création visuelle</div><div class="tags"><span class="tag">Canva</span><span class="tag">Logos</span><span class="tag">Cartes de visite</span><span class="tag">Affiches</span><span class="tag">Identité visuelle</span><span class="tag">Vidéo promotionnelle</span></div></div>
+      <div class="skill-block"><div class="skill-icon">🌐</div><div class="skill-title">Web & outils digitaux</div><div class="tags"><span class="tag">Systeme.io</span><span class="tag">WordPress</span><span class="tag">Suite Office avancé</span><span class="tag">HTML/CSS notions</span></div></div>
+      <div class="skill-block"><div class="skill-icon">📋</div><div class="skill-title">Gestion de projets</div><div class="tags"><span class="tag">Planning</span><span class="tag">Coordination</span><span class="tag">Suivi client</span><span class="tag">Prospection</span><span class="tag">Événementiel</span><span class="tag">Brief & reporting</span></div></div>
+      <div class="skill-block"><div class="skill-icon">🤝</div><div class="skill-title">Relation & animation</div><div class="tags"><span class="tag">Prise de parole</span><span class="tag">Animation de groupes</span><span class="tag">Présentation</span><span class="tag">Accueil client</span><span class="tag">Négociation</span></div></div>
+      <div class="skill-block"><div class="skill-icon">⚙️</div><div class="skill-title">Gestion opérationnelle</div><div class="tags"><span class="tag">Autonomie totale</span><span class="tag">Encaissements</span><span class="tag">Gestion de commandes</span><span class="tag">Organisation</span></div></div>
     </div>
     <div class="soft-section">
       <h3>Ce qu'on dit de moi</h3>
@@ -552,81 +521,25 @@
   </div>
 </div>
 
-<!-- ════════════════ PORTFOLIO ════════════════ -->
+<!-- ════ PORTFOLIO ════ -->
 <div id="page-portfolio" class="page">
   <div class="page-inner wide">
     <div class="section-tag">Portfolio</div>
     <h2>Mes projets<br><em>en conditions réelles</em></h2>
     <p class="portfolio-intro">Des réalisations concrètes menées dans mes expériences ou pour des clients. Chaque projet est une preuve, pas une démonstration.</p>
     <div class="proj-grid">
-      <div class="proj-card">
-        <div class="proj-bg bg-1">
-          <div class="proj-emoji">🏆</div>
-          <div class="proj-info text-light">
-            <div class="proj-cat">Incubateur Cnam — Événementiel & Com</div>
-            <div class="proj-title">Prix des Femmes Entrepreneures 2026</div>
-          </div>
-        </div>
-        <div class="proj-overlay"><span>Voir le projet</span></div>
-      </div>
-      <div class="proj-card">
-        <div class="proj-bg bg-2">
-          <div class="proj-emoji">🌐</div>
-          <div class="proj-info text-light">
-            <div class="proj-cat">Création web</div>
-            <div class="proj-title">Site vitrine Systeme.io</div>
-          </div>
-        </div>
-        <div class="proj-overlay"><span>Voir le projet</span></div>
-      </div>
-      <div class="proj-card">
-        <div class="proj-bg bg-3">
-          <div class="proj-emoji">🎨</div>
-          <div class="proj-info text-light">
-            <div class="proj-cat">Identité visuelle</div>
-            <div class="proj-title">Logos & cartes de visite</div>
-          </div>
-        </div>
-        <div class="proj-overlay"><span>Voir le projet</span></div>
-      </div>
-      <div class="proj-card">
-        <div class="proj-bg bg-4">
-          <div class="proj-emoji">🎯</div>
-          <div class="proj-info text-light">
-            <div class="proj-cat">Événementiel</div>
-            <div class="proj-title">Challenge Start-up Impact</div>
-          </div>
-        </div>
-        <div class="proj-overlay"><span>Voir le projet</span></div>
-      </div>
-      <div class="proj-card">
-        <div class="proj-bg bg-5">
-          <div class="proj-emoji">📱</div>
-          <div class="proj-info text-dark">
-            <div class="proj-cat">Réseaux sociaux</div>
-            <div class="proj-title">Stratégie & contenus digitaux</div>
-          </div>
-        </div>
-        <div class="proj-overlay"><span>Voir le projet</span></div>
-      </div>
-      <div class="proj-card">
-        <div class="proj-bg bg-6">
-          <div class="proj-emoji">🚀</div>
-          <div class="proj-info text-light">
-            <div class="proj-cat">Gestion autonome</div>
-            <div class="proj-title">Entrepreneuriat personnel</div>
-          </div>
-        </div>
-        <div class="proj-overlay"><span>Voir le projet</span></div>
-      </div>
+      <div class="proj-card"><div class="proj-bg bg-1"><div class="proj-emoji">🏆</div><div class="proj-info text-light"><div class="proj-cat">Incubateur Cnam — Événementiel & Com</div><div class="proj-title">Prix des Femmes Entrepreneures 2026</div></div></div><div class="proj-overlay"><span>Voir le projet</span></div></div>
+      <div class="proj-card"><div class="proj-bg bg-2"><div class="proj-emoji">🌐</div><div class="proj-info text-light"><div class="proj-cat">Création web</div><div class="proj-title">Site vitrine Systeme.io</div></div></div><div class="proj-overlay"><span>Voir le projet</span></div></div>
+      <div class="proj-card"><div class="proj-bg bg-3"><div class="proj-emoji">🎨</div><div class="proj-info text-light"><div class="proj-cat">Identité visuelle</div><div class="proj-title">Logos & cartes de visite</div></div></div><div class="proj-overlay"><span>Voir le projet</span></div></div>
+      <div class="proj-card"><div class="proj-bg bg-4"><div class="proj-emoji">🎯</div><div class="proj-info text-light"><div class="proj-cat">Événementiel</div><div class="proj-title">Challenge Start-up Impact</div></div></div><div class="proj-overlay"><span>Voir le projet</span></div></div>
+      <div class="proj-card"><div class="proj-bg bg-5"><div class="proj-emoji">📱</div><div class="proj-info text-dark"><div class="proj-cat">Réseaux sociaux</div><div class="proj-title">Stratégie & contenus digitaux</div></div></div><div class="proj-overlay"><span>Voir le projet</span></div></div>
+      <div class="proj-card"><div class="proj-bg bg-6"><div class="proj-emoji">🚀</div><div class="proj-info text-light"><div class="proj-cat">Gestion autonome</div><div class="proj-title">Entrepreneuriat personnel</div></div></div><div class="proj-overlay"><span>Voir le projet</span></div></div>
     </div>
-    <div class="placeholder-note">
-      📁 <strong>À personnaliser :</strong> clique sur une carte pour y ajouter tes visuels. Tu peux remplacer les fonds colorés par des images via <code>background-image: url('ta-photo.jpg')</code> dans la classe <code>.proj-bg</code> correspondante.
-    </div>
+    <div class="placeholder-note">📁 <strong>À personnaliser :</strong> remplace les fonds colorés par tes visuels via <code>background-image: url('ta-photo.jpg')</code> dans la classe <code>.proj-bg</code> correspondante.</div>
   </div>
 </div>
 
-<!-- ════════════════ CV ════════════════ -->
+<!-- ════ CV ════ -->
 <div id="page-cv" class="page">
   <div class="page-inner">
     <div class="cv-header">
@@ -637,9 +550,7 @@
       </div>
       <a href="#" class="cv-download">⬇ Télécharger le PDF</a>
     </div>
-
     <div class="cv-body">
-      <!-- GAUCHE -->
       <div class="cv-col">
         <div>
           <div class="cv-sec-title">Contact</div>
@@ -647,185 +558,69 @@
           <div class="cv-contact-item">📍&nbsp; Arpajon (91) — Île-de-France</div>
           <div class="cv-contact-item">💼&nbsp; linkedin.com/in/votre-profil</div>
         </div>
-
         <div>
           <div class="cv-sec-title">Formation</div>
-          <div class="cv-form-item">
-            <div class="cv-form-date">En cours</div>
-            <div class="cv-form-title">DSP Assistant Communication Digitale</div>
-            <div class="cv-form-place">Cnam Paris</div>
-          </div>
-          <div class="cv-form-item">
-            <div class="cv-form-date">Rentrée sept. 2026</div>
-            <div class="cv-form-title">Titre Entrepreneur de Petite Entreprise</div>
-            <div class="cv-form-place">Cnam Paris — en alternance</div>
-          </div>
-          <div class="cv-form-item">
-            <div class="cv-form-date">Formation initiale</div>
-            <div class="cv-form-title">Bac Pro Cuisine — Section européenne</div>
-            <div class="cv-form-place">Erasmus — Malte & Dublin</div>
-          </div>
+          <div class="cv-form-item"><div class="cv-form-date">En cours</div><div class="cv-form-title">DSP Assistant Communication Digitale</div><div class="cv-form-place">Cnam Paris</div></div>
+          <div class="cv-form-item"><div class="cv-form-date">Rentrée sept. 2026</div><div class="cv-form-title">Titre Entrepreneur de Petite Entreprise</div><div class="cv-form-place">Cnam Paris — en alternance</div></div>
+          <div class="cv-form-item"><div class="cv-form-date">Formation initiale</div><div class="cv-form-title">Bac Pro Cuisine — Section européenne</div><div class="cv-form-place">Erasmus — Malte & Dublin</div></div>
         </div>
-
         <div>
           <div class="cv-sec-title">Langues</div>
-          <div class="cv-lang-row">
-            <span class="cv-lang-name">Français</span>
-            <div class="cv-dots">
-              <div class="cv-dot on"></div><div class="cv-dot on"></div><div class="cv-dot on"></div><div class="cv-dot on"></div><div class="cv-dot on"></div>
-            </div>
-          </div>
-          <div class="cv-lang-row">
-            <span class="cv-lang-name">Anglais — B2+</span>
-            <div class="cv-dots">
-              <div class="cv-dot on"></div><div class="cv-dot on"></div><div class="cv-dot on"></div><div class="cv-dot on"></div><div class="cv-dot"></div>
-            </div>
-          </div>
+          <div class="cv-lang-row"><span class="cv-lang-name">Français</span><div class="cv-dots"><div class="cv-dot on"></div><div class="cv-dot on"></div><div class="cv-dot on"></div><div class="cv-dot on"></div><div class="cv-dot on"></div></div></div>
+          <div class="cv-lang-row"><span class="cv-lang-name">Anglais — B2+</span><div class="cv-dots"><div class="cv-dot on"></div><div class="cv-dot on"></div><div class="cv-dot on"></div><div class="cv-dot on"></div><div class="cv-dot"></div></div></div>
         </div>
-
         <div>
           <div class="cv-sec-title">Outils</div>
-          <div class="cv-skill-row">
-            <div class="cv-skill-label">Canva <span class="cv-skill-level">Maîtrise</span></div>
-            <div class="cv-bar"><div class="cv-bar-fill" style="width:92%"></div></div>
-          </div>
-          <div class="cv-skill-row">
-            <div class="cv-skill-label">Réseaux sociaux <span class="cv-skill-level">Maîtrise</span></div>
-            <div class="cv-bar"><div class="cv-bar-fill" style="width:90%"></div></div>
-          </div>
-          <div class="cv-skill-row">
-            <div class="cv-skill-label">Suite Office <span class="cv-skill-level">Maîtrise</span></div>
-            <div class="cv-bar"><div class="cv-bar-fill" style="width:88%"></div></div>
-          </div>
-          <div class="cv-skill-row">
-            <div class="cv-skill-label">Systeme.io <span class="cv-skill-level">Avancé</span></div>
-            <div class="cv-bar"><div class="cv-bar-fill" style="width:82%"></div></div>
-          </div>
-          <div class="cv-skill-row">
-            <div class="cv-skill-label">WordPress <span class="cv-skill-level">Avancé</span></div>
-            <div class="cv-bar"><div class="cv-bar-fill" style="width:70%"></div></div>
-          </div>
+          <div class="cv-skill-row"><div class="cv-skill-label">Canva <span class="cv-skill-level">Maîtrise</span></div><div class="cv-bar"><div class="cv-bar-fill" style="width:92%"></div></div></div>
+          <div class="cv-skill-row"><div class="cv-skill-label">Réseaux sociaux <span class="cv-skill-level">Maîtrise</span></div><div class="cv-bar"><div class="cv-bar-fill" style="width:90%"></div></div></div>
+          <div class="cv-skill-row"><div class="cv-skill-label">Suite Office <span class="cv-skill-level">Maîtrise</span></div><div class="cv-bar"><div class="cv-bar-fill" style="width:88%"></div></div></div>
+          <div class="cv-skill-row"><div class="cv-skill-label">Systeme.io <span class="cv-skill-level">Avancé</span></div><div class="cv-bar"><div class="cv-bar-fill" style="width:82%"></div></div></div>
+          <div class="cv-skill-row"><div class="cv-skill-label">WordPress <span class="cv-skill-level">Avancé</span></div><div class="cv-bar"><div class="cv-bar-fill" style="width:70%"></div></div></div>
         </div>
       </div>
-
-      <!-- DROITE -->
       <div class="cv-col">
         <div>
           <div class="cv-sec-title">Expériences</div>
-          <div class="cv-exp-item">
-            <div class="cv-exp-date">2025 – 2026</div>
-            <div class="cv-exp-title">Stagiaire Communication & Événementiel</div>
-            <div class="cv-exp-place">Cnam Incubateur — Paris</div>
-            <ul class="cv-exp-desc">
-              <li>Création de visuels et gestion des réseaux sociaux</li>
-              <li>Coordination et promotion du Prix des Femmes Entrepreneures</li>
-              <li>Prospection de startups et gestion des contacts</li>
-              <li>Organisation du Challenge Start-up Impact</li>
-              <li>Planning éditorial et gestion des réservations</li>
-            </ul>
-          </div>
-          <div class="cv-exp-item">
-            <div class="cv-exp-date">Expérience</div>
-            <div class="cv-exp-title">Gérante mandataire remplaçante</div>
-            <div class="cv-exp-place">Nicolas — Boutique</div>
-            <ul class="cv-exp-desc">
-              <li>Tenue de boutique en totale autonomie</li>
-              <li>Gestion des commandes, encaissements, remises en banque</li>
-              <li>Accueil et conseil clientèle</li>
-            </ul>
-          </div>
-          <div class="cv-exp-item">
-            <div class="cv-exp-date">Service civique</div>
-            <div class="cv-exp-title">Co-référente</div>
-            <div class="cv-exp-place">Conseil Municipal des Enfants — Évry-Courcouronnes</div>
-            <ul class="cv-exp-desc">
-              <li>Animation et coordination de groupes</li>
-              <li>Prises de parole et présentations publiques</li>
-              <li>Gestion de projets collectifs</li>
-            </ul>
-          </div>
+          <div class="cv-exp-item"><div class="cv-exp-date">2025 – 2026</div><div class="cv-exp-title">Stagiaire Communication & Événementiel</div><div class="cv-exp-place">Cnam Incubateur — Paris</div><ul class="cv-exp-desc"><li>Création de visuels et gestion des réseaux sociaux</li><li>Coordination et promotion du Prix des Femmes Entrepreneures</li><li>Prospection de startups et gestion des contacts</li><li>Organisation du Challenge Start-up Impact</li><li>Planning éditorial et gestion des réservations</li></ul></div>
+          <div class="cv-exp-item"><div class="cv-exp-date">Expérience</div><div class="cv-exp-title">Gérante mandataire remplaçante</div><div class="cv-exp-place">Nicolas — Boutique</div><ul class="cv-exp-desc"><li>Tenue de boutique en totale autonomie</li><li>Gestion des commandes, encaissements, remises en banque</li><li>Accueil et conseil clientèle</li></ul></div>
+          <div class="cv-exp-item"><div class="cv-exp-date">Service civique</div><div class="cv-exp-title">Co-référente</div><div class="cv-exp-place">Conseil Municipal des Enfants — Évry-Courcouronnes</div><ul class="cv-exp-desc"><li>Animation et coordination de groupes</li><li>Prises de parole et présentations publiques</li><li>Gestion de projets collectifs</li></ul></div>
         </div>
-
         <div>
           <div class="cv-sec-title">Projets & réalisations</div>
-          <div class="cv-exp-item">
-            <div class="cv-exp-date">Activité personnelle</div>
-            <div class="cv-exp-title">Gestion d'une activité de traiteur indépendante</div>
-            <ul class="cv-exp-desc">
-              <li>Pilotage complet en autonomie : production, clientèle, commandes</li>
-              <li>Stratégie et gestion de la communication digitale</li>
-              <li>Démonstration concrète de sens des responsabilités et d'autonomie entrepreneuriale</li>
-            </ul>
-          </div>
-          <div class="cv-exp-item">
-            <div class="cv-exp-date">Prestations indépendantes</div>
-            <div class="cv-exp-title">Prestations de communication</div>
-            <ul class="cv-exp-desc">
-              <li>Création de site internet (Systeme.io)</li>
-              <li>Conception de logos et cartes de visite</li>
-              <li>Stratégie et contenus réseaux sociaux</li>
-            </ul>
-          </div>
+          <div class="cv-exp-item"><div class="cv-exp-date">Activité personnelle</div><div class="cv-exp-title">Gestion d'une activité de traiteur indépendante</div><ul class="cv-exp-desc"><li>Pilotage complet en autonomie : production, clientèle, commandes</li><li>Stratégie et gestion de la communication digitale</li><li>Sens des responsabilités et autonomie entrepreneuriale</li></ul></div>
+          <div class="cv-exp-item"><div class="cv-exp-date">Prestations indépendantes</div><div class="cv-exp-title">Prestations de communication</div><ul class="cv-exp-desc"><li>Création de site internet (Systeme.io)</li><li>Conception de logos et cartes de visite</li><li>Stratégie et contenus réseaux sociaux</li></ul></div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ════════════════ CONTACT ════════════════ -->
+<!-- ════ CONTACT ════ -->
 <div id="page-contact" class="page">
   <div class="page-inner">
     <div class="section-tag">Contact</div>
     <h2>Vous avez un besoin.<br><em>Je suis la solution.</em></h2>
     <div class="contact-grid">
       <div>
-        <p class="contact-intro">
-          Je suis à la recherche d'une alternance à partir de <strong>septembre 2026</strong> pour préparer le Titre Entrepreneur de Petite Entreprise au Cnam Paris.
-        </p>
-        <div class="contact-pitch">
-          "Vous cherchez quelqu'un qui peut gérer votre communication, <strong>coordonner vos projets</strong> et travailler en autonomie sans qu'on lui explique tout — je suis cette personne. Je ne suis pas une stagiaire qui observe : je produis dès le premier jour."
-        </div>
+        <p class="contact-intro">Je suis à la recherche d'une alternance à partir de <strong>septembre 2026</strong> pour préparer le Titre Entrepreneur de Petite Entreprise au Cnam Paris.</p>
+        <div class="contact-pitch">"Vous cherchez quelqu'un qui peut gérer votre communication, <strong>coordonner vos projets</strong> et travailler en autonomie sans qu'on lui explique tout — je suis cette personne. Je ne suis pas une stagiaire qui observe : je produis dès le premier jour."</div>
         <div class="cibles-section">
           <h3>Je cible en priorité</h3>
           <div class="cibles-grid">
-            <div class="cible-item">
-              <div class="cible-title">🏢 Petites structures</div>
-              <div class="cible-desc">TPE, associations, startups qui ont besoin de polyvalence réelle</div>
-            </div>
-            <div class="cible-item">
-              <div class="cible-title">🏛️ Collectivités</div>
-              <div class="cible-desc">Mairies, services publics locaux, communication institutionnelle</div>
-            </div>
-            <div class="cible-item">
-              <div class="cible-title">📡 Agences & studios</div>
-              <div class="cible-desc">Petites agences com ou digitales qui cherchent un profil terrain opérationnel</div>
-            </div>
-            <div class="cible-item">
-              <div class="cible-title">🤝 Accompagnement pro</div>
-              <div class="cible-desc">Structures d'accompagnement, CFA, organismes de formation</div>
-            </div>
+            <div class="cible-item"><div class="cible-title">🏢 Petites structures</div><div class="cible-desc">TPE, associations, startups qui ont besoin de polyvalence réelle</div></div>
+            <div class="cible-item"><div class="cible-title">🏛️ Collectivités</div><div class="cible-desc">Mairies, services publics locaux, communication institutionnelle</div></div>
+            <div class="cible-item"><div class="cible-title">📡 Agences & studios</div><div class="cible-desc">Petites agences com ou digitales qui cherchent un profil terrain opérationnel</div></div>
+            <div class="cible-item"><div class="cible-title">🤝 Accompagnement pro</div><div class="cible-desc">Structures d'accompagnement, CFA, organismes de formation</div></div>
           </div>
         </div>
       </div>
       <div>
         <div class="contact-items">
-          <a href="mailto:votre@email.fr" class="contact-item">
-            <div class="ci-icon">✉️</div>
-            <div><div class="ci-label">Email</div><div class="ci-value">votre@email.fr</div></div>
-          </a>
-          <a href="https://linkedin.com" target="_blank" class="contact-item">
-            <div class="ci-icon">💼</div>
-            <div><div class="ci-label">LinkedIn</div><div class="ci-value">Voir mon profil</div></div>
-          </a>
-          <div class="contact-item" onclick="showPage('cv')">
-            <div class="ci-icon">📄</div>
-            <div><div class="ci-label">CV</div><div class="ci-value">Consulter & télécharger</div></div>
-          </div>
+          <a href="mailto:votre@email.fr" class="contact-item"><div class="ci-icon">✉️</div><div><div class="ci-label">Email</div><div class="ci-value">votre@email.fr</div></div></a>
+          <a href="https://linkedin.com" target="_blank" class="contact-item"><div class="ci-icon">💼</div><div><div class="ci-label">LinkedIn</div><div class="ci-value">Voir mon profil</div></div></a>
+          <div class="contact-item" onclick="showPage('cv')"><div class="ci-icon">📄</div><div><div class="ci-label">CV</div><div class="ci-value">Consulter & télécharger</div></div></div>
         </div>
-        <div class="contact-note">
-          📍 Basée à Arpajon (91) — mobilité en Île-de-France, télétravail partiel possible.<br>
-          🗓️ Disponible à partir de septembre 2026. N'hésitez pas à prendre contact en amont.
-        </div>
+        <div class="contact-note">📍 Basée à Arpajon (91) — mobilité en Île-de-France, télétravail partiel possible.<br>🗓️ Disponible à partir de septembre 2026.</div>
       </div>
     </div>
   </div>
@@ -833,23 +628,37 @@
 
 <script>
   function showPage(id) {
-    // Cacher toutes les pages
-    document.querySelectorAll('.page').forEach(p => {
-      p.classList.remove('active');
-    });
-    // Retirer l'état actif de tous les liens nav
-    document.querySelectorAll('.nav-links a').forEach(a => {
-      a.classList.remove('active');
-    });
-    // Afficher uniquement la page cible
-    const target = document.getElementById('page-' + id);
-    if (target) target.classList.add('active');
-    // Activer le bon lien nav
-    const navLink = document.getElementById('nav-' + id);
-    if (navLink) navLink.classList.add('active');
-    // Remonter en haut
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-links a, .mobile-menu a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    const d = document.getElementById('nav-' + id);
+    const m = document.getElementById('mnav-' + id);
+    if (d) d.classList.add('active');
+    if (m) m.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  function toggleMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const burger = document.getElementById('burger');
+    menu.classList.toggle('open');
+    burger.classList.toggle('open');
+  }
+
+  function closeMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+    document.getElementById('burger').classList.remove('open');
+  }
+
+  // Fermer le menu si on clique ailleurs
+  document.addEventListener('click', function(e) {
+    const menu = document.getElementById('mobileMenu');
+    const burger = document.getElementById('burger');
+    if (!menu.contains(e.target) && !burger.contains(e.target)) {
+      menu.classList.remove('open');
+      burger.classList.remove('open');
+    }
+  });
 </script>
 </body>
 </html>
