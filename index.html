@@ -46,17 +46,15 @@
 
     /* Burger — caché desktop, visible mobile */
     .burger {
-      display: none; flex-direction:column; justify-content:center; gap:5px;
-      width:40px; height:40px; cursor:pointer; padding:6px; border:none; background:none;
-      flex-shrink: 0;
-    }
-    .burger span {
-      display:block; height:2px; background:var(--brown); border-radius:2px;
-      transition: transform .3s, opacity .3s;
-    }
-    .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .burger.open span:nth-child(2) { opacity:0; }
-    .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  display: none; flex-direction:column; justify-content:center; gap:6px;
+  width:44px; height:44px; cursor:pointer; padding:8px; border:none;
+  background: rgba(74,103,65,0.1); border-radius:4px;
+  flex-shrink: 0; -webkit-tap-highlight-color: transparent;
+}
+.burger span {
+  display:block; height:3px; width:100%; background:#3a2e22;
+  border-radius:3px; transition: transform .3s, opacity .3s;
+}
 
     /* Menu mobile déroulant */
     .mobile-menu {
